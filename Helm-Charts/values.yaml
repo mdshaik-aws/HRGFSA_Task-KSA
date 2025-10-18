@@ -1,6 +1,6 @@
 app:
   name: hrgfsa
-  image: 448049787147.dkr.ecr.us-east-1.amazonaws.com/hrgfsa-task:6
+  image: 448049787147.dkr.ecr.us-east-1.amazonaws.com/hrgfsa-task:7
   replicas: 2
   containerPort: 80
   servicePort: 80
