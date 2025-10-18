@@ -37,6 +37,24 @@ pipeline {
             }
         }
 
+
+        stage("Scan Docker Image for Vulnerabilities") {
+            steps {
+                script {
+                    def fullImage = "${IMAGE_NAME}:${BUILD_TAG}"
+                    sh """
+                    echo "Scanning Docker image ${fullImage} for vulnerabilities..."
+                    trivy image --severity HIGH,CRITICAL ${fullImage}
+                    if [ \$? -ne 0 ]; then
+                    echo "Vulnerabilities found! Failing the build..."
+                    exit 1
+                    fi
+                    """
+        }
+    }
+}
+
+
         stage("Push to ECR") {
             steps {
                 withCredentials([usernamePassword(
