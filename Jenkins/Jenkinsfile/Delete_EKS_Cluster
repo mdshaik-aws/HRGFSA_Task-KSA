@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage("Git Checkout") {
+            steps {
+                git branch: 'main', url: 'https://github.com/mdshaik-aws/HRGFSA_Task-KSA.git'
+            }
+        }
+
+        stage("Terraform Apply") {
+            steps {
+                dir('EKS_Cluster') {
+                    sh 'helm uninstall aws-load-balancer-controller -n kube-system'
+                    sh 'terraform destroy -auto-approve'
+                   
+                }
+            }
+        }
+    }
+}
+
+

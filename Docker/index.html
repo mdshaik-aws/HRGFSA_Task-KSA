@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRGF Engineering Consultancy</title>
+<style>
+    /* Reset */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html, body {
+        width: 100%;
+        overflow-x: hidden; /* prevent horizontal scroll */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f9;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    /* Implemented by line */
+    .creator {
+        text-align: center;
+        background-color: #e0e0e0;
+        color: #333;
+        padding: 8px 0;
+        font-size: 0.9em;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    /* Header */
+    header {
+        background: linear-gradient(135deg, #004080, #1e90ff);
+        color: #fff;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    header h1 {
+        font-size: 2.5em;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    header p {
+        font-size: 1.2em;
+        font-weight: 300;
+    }
+
+    /* Services */
+    .services {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 40px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .service-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        flex: 1 1 280px; /* responsive width */
+        max-width: 320px;
+        min-width: 250px;
+        text-align: center;
+        padding: 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .service-card h3 {
+        color: #004080;
+        margin-bottom: 10px;
+        font-size: 1.3em;
+    }
+
+    .service-card p {
+        color: #555;
+        font-size: 1em;
+    }
+
+    /* Footer */
+    footer {
+        background-color: #222;
+        color: #fff;
+        text-align: center;
+        padding: 25px 20px;
+        font-size: 1em;
+    }
+
+    footer a {
+        color: #1e90ff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+        color: #00bfff;
+        text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .services {
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 30px 10px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- Implemented by line--->
+<div class="creator">Implemented by -Shaik Mohammad Rizwan</div>
+
+<header>
+    <h1>Welcome to HRGF Engineering Consultancy</h1>
+    <p>Delivering excellence in engineering solutions.</p>
+</header>
+
+<section class="services">
+    <div class="service-card">
+        <h3>Power & Energy</h3>
+        <p>Innovative solutions to meet energy demands efficiently and sustainably.</p>
+    </div>
+    <div class="service-card">
+        <h3>Architecture</h3>
+        <p>Designing structures that combine functionality with aesthetics.</p>
+    </div>
+    <div class="service-card">
+        <h3>Consultancy</h3>
+        <p>Expert advice to guide your projects from concept to completion.</p>
+    </div>
+</section>
+
+<footer>
+    Visit our website: <a href="https://www.hrgfsa.com/careers" target="_blank">HRGFSA Careers</a>
+</footer>
+
+</body>
+</html>
+
+

@@ -1,0 +1,153 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "my-web-app"
+        AWS_REGION = "us-east-1"
+        BUILD_TAG  = "${env.BUILD_NUMBER}"
+        ECR_REPO   = "448049787147.dkr.ecr.us-east-1.amazonaws.com/hrgfsa-task"
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+    }
+
+    stages {
+       
+
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage("Git Checkout") {
+            steps {
+                git branch: 'main', url: 'https://github.com/mdshaik-aws/HRGFSA_Task-KSA.git'
+            }
+        }
+
+        stage("Build Docker Image") {
+            steps {
+                dir("Docker") {
+                    script {
+                        echo "Building Docker image: ${IMAGE_NAME}:${BUILD_TAG}"
+                        docker.build("${IMAGE_NAME}:${BUILD_TAG}")
+                    }
+                }
+            }
+        }
+
+        stage("Push to ECR") {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'AWS_Creds',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                )]) {
+                    sh '''
+                        echo "Logging into AWS ECR..."
+                        aws ecr get-login-password --region $AWS_REGION | \
+                        docker login --username AWS --password-stdin $ECR_REPO
+
+                        echo "Tagging Docker image for ECR..."
+                        docker tag $IMAGE_NAME:$BUILD_TAG $ECR_REPO:$BUILD_TAG
+
+                        echo "Pushing Docker image to ECR..."
+                        docker push $ECR_REPO:$BUILD_TAG
+                    '''
+                }
+            }
+        }
+
+        stage("Update Helm Values") {
+            steps {
+                dir("Helm-Charts") {
+                    script {
+                        def imageTag = "${env.BUILD_TAG}"
+                        def valuesFile = "values.yaml"
+
+                        sh """
+                            echo "Updating image tag in values.yaml..."
+                            sed -i -E "s|(image: .*/hrgfsa-task:).*|\\1${imageTag}|" ${valuesFile}
+                        """
+
+                        withCredentials([usernamePassword(
+                            credentialsId: 'Github_Creds',
+                            usernameVariable: 'GIT_USER',
+                            passwordVariable: 'GIT_TOKEN'
+                        )]) {
+                            sh """
+                                echo "Committing updated Helm values to GitHub..."
+                                git remote set-url origin https://$GIT_USER:$GIT_TOKEN@github.com/mdshaik-aws/HRGFSA_Task-KSA.git
+                                git config user.email "md.rizwan.shaik.devops.cloud@gmail.com"
+                                git add ${valuesFile}
+                                git commit -m "Update Docker image tag to ${imageTag}"
+                                git push origin main
+                            """
+                        }
+                    }
+                }
+            }
+        }
+
+        stage("Configure Kubeconfig") {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'AWS_Creds',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                )]) {
+                    sh '''
+                        echo "Configuring kubeconfig for EKS..."
+                        aws eks --region $AWS_REGION update-kubeconfig --name my-eks-cluster
+                    '''
+                }
+            }
+        }
+
+        stage("Deploy Observability Stack") {
+            steps {
+                script {
+withCredentials([usernamePassword(
+                    credentialsId: 'AWS_Creds',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                )]) {
+                    sh '''
+    aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
+
+                    if ! helm status monitoring -n monitoring >/dev/null 2>&1; then
+                        echo "Deploying Prometheus & Grafana..."
+                        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+                        helm repo update
+                        helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+                            --namespace monitoring --create-namespace --atomic --wait
+                    else
+                        echo "Observability stack already installed, skipping deployment..."
+                    fi
+                    '''
+                }
+            }
+        }}
+
+        stage("Deploy Application Helm Chart") {
+            steps {
+                script {
+                withCredentials([usernamePassword(
+                    credentialsId: 'AWS_Creds',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                )]) {
+                    sh '''
+                            aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
+
+                        echo "Deploying application via Helm..."
+                        helm upgrade --install hrgfsa-app ./Helm-Charts -n default --atomic --wait
+                    '''
+                }}
+            }
+        }
+        
+
+    }
+}

@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage("Git Checkout") {
+            steps {
+                git branch: 'main', url: 'https://github.com/mdshaik-aws/HRGFSA_Task-KSA.git'
+            }
+        }
+
+        stage("Terraform Apply") {
+            steps {
+                dir('EKS_Cluster') {
+                    sh 'terraform init'
+                    sh 'terraform validate'
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+    }
+}
+
+
+
+
