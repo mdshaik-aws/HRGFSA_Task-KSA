@@ -1,4 +1,9 @@
-## 🎥 **Project Overview Video** [**Click here to watch the video on S3**](http://hrgfsa-task.s3-website-us-east-1.amazonaws.com/)
+<h2 align="center">🎥 Project Overview Video</h2>
+<p align="center">
+  <a href="http://hrgfsa-task.s3-website-us-east-1.amazonaws.com/" target="_blank">
+    <img src="https://img.shields.io/badge/▶️%20Watch%20Full%20Demo%20on%20S3-FF0000?style=for-the-badge&logo=amazonaws&logoColor=white" alt="Watch Video">
+  </a>
+</p>
 
 ---
 
