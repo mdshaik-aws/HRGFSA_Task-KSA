@@ -3,9 +3,6 @@
 
 ---
 
-# 🚀 **Automated Kubernetes Deployment: Hello World Web Application**
-
-
 # 🚀 Automated Kubernetes Deployment: Hello World Web Application
 
 ## 📘 Project Overview
