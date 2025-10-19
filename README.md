@@ -11,7 +11,7 @@
 
 ## 📘 Project Overview
 
-This project shows how to **automatically deploy a simple web application** to a Kubernetes cluster using modern DevOps practices.
+This project shows how to **automatically deploy a HRGFSA web application** to a Kubernetes cluster using modern DevOps practices.
 
 **Key points:**
 
