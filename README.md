@@ -7,7 +7,7 @@
 
 ---
 
-# 🚀 Automated Kubernetes Deployment: Hello World Web Application
+# 🚀 Automated Kubernetes Deployment: HRGFSA Web Application
 
 ## 📘 Project Overview
 
