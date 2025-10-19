@@ -1,5 +1,4 @@
-## 🎥 **Project Overview Video**
-👉 [**Click here to watch the video on S3**](http://hrgfsa-task.s3-website-us-east-1.amazonaws.com/)
+## 🎥 **Project Overview Video** [**Click here to watch the video on S3**](http://hrgfsa-task.s3-website-us-east-1.amazonaws.com/)
 
 ---
 
